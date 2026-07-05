@@ -20,62 +20,6 @@ class MyGrowattTL3sDevice extends Growatt {
     this.log(`device name id ${name}`);
     this.log(`device name ${this.getName()}`);
 
-    // remove unexpected capabilities 
-    if (this.hasCapability('growatt_onoff')) {
-      await this.removeCapability('growatt_onoff');
-      this.log('Removed legacy capability growatt_onoff (TLS driver)');
-    }
-
-    if (this.hasCapability('growatttls_onoff')) {
-      await this.removeCapability('growatttls_onoff');
-    }
-
-    if (this.hasCapability('priority')) {
-      await this.removeCapability('priority');
-      this.log('Removed legacy capability priority (TLS driver)');
-    }
-
-    if (this.hasCapability('batterystatus')) {
-      await this.removeCapability('batterystatus');
-      this.log('Removed legacy capability batterystatus (TLS driver)');
-    }
-
-    if (this.hasCapability('measure_power.export')) {
-      await this.removeCapability('measure_power.export');
-      this.log('Removed legacy capability measure_power.export (TLS driver)');
-    }
-
-    if (this.hasCapability('measure_power.gridoutput')) {
-      await this.removeCapability('measure_power.gridoutput');
-      this.log('Removed legacy capability measure_power.gridoutput (TLS driver)');
-    }
-    
-    if (this.hasCapability('measure_voltage.meter')) {
-      await this.removeCapability('measure_voltage.meter');
-      this.log('Removed legacy capability measure_voltage.meter (TLS driver)');
-    }    
-    // end
-
-    if (this.hasCapability('onoff')) {
-      await this.removeCapability('onoff');
-    }
-
-    if (this.hasCapability('exportcapacity') === false) {
-      await this.addCapability('exportcapacity');
-    }
-
-    if (this.hasCapability('exportlimitenabled') === false) {
-      await this.addCapability('exportlimitenabled');
-    }
-
-    if (this.hasCapability('exportlimitpowerrate') === false) {
-      await this.addCapability('exportlimitpowerrate');
-    }
-
-    if (this.hasCapability('target_power') === false) {
-      await this.addCapability('target_power');
-    }
-
     const maxpeakpower = Number(this.getSetting('maxpeakpower'));
     
     await this.setCapabilityOptions('target_power', { min: 0, max: this.getEffectiveMaxPower() });
