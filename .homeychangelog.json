@@ -136,5 +136,8 @@
   },
   "3.0.227": {
     "en": "Added Power Limit slider to Growatt TLS"
+  },
+  "3.0.228": {
+    "en": "Cleaned up migration code for Growatt TLS"
   }
 }
