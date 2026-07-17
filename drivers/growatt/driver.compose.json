@@ -26,7 +26,9 @@
     "meter_power.pv2TotalEnergy",
     "measure_voltage.meter",
     "exportlimitenabled",
-    "exportlimitpowerrate"   
+    "exportlimitpowerrate",
+    "exportcapacity",
+    "target_power"
   ],
   "capabilitiesOptions": {
     "measure_power": {

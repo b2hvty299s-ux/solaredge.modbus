@@ -5,7 +5,7 @@
     "de": "Setze Exportbeschränkung"
   },
   "getable": true,
-  "setable": false,
+  "setable": true,
   "uiComponent": "sensor",
   "uiQuickAction": true,
   "insights": true,
