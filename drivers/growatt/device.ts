@@ -64,14 +64,23 @@ class MyGrowattDevice extends Growatt {
       return Promise.resolve(result);
     });
 
-    // capability listeners — triggered by external setCapabilityValue (e.g. EMS app)
-    this.registerCapabilityListener('exportlimitenabled', async (value) => {
-      await this.updateControl('exportlimitenabled', Number(value));
-    });
+    // Make export limit capabilities writable only when the user has explicitly
+    // opted in via the 'ems_control' device setting. The global capability
+    // definitions keep setable: false to protect other Growatt variants (e.g.
+    // TLS) where writing these registers without a compatible meter on the
+    // Modbus network can cause inverter errors.
+    if (this.getSetting('ems_control') === true) {
+      await this.setCapabilityOptions('exportlimitenabled',   { setable: true });
+      await this.setCapabilityOptions('exportlimitpowerrate', { setable: true });
 
-    this.registerCapabilityListener('exportlimitpowerrate', async (value) => {
-      await this.updateControl('exportlimitpowerrate', Number(value));
-    });
+      this.registerCapabilityListener('exportlimitenabled', async (value) => {
+        await this.updateControl('exportlimitenabled', Number(value));
+      });
+
+      this.registerCapabilityListener('exportlimitpowerrate', async (value) => {
+        await this.updateControl('exportlimitpowerrate', Number(value));
+      });
+    }
 
     // flow action
     const onoffAction = this.homey.flow.getActionCard('on_off');
@@ -136,6 +145,10 @@ class MyGrowattDevice extends Growatt {
       const max = Number(newSettings.maxpeakpower) || 6000;
       await this.setCapabilityOptions('target_power', { min: 0, max });
       await this.setCapabilityOptions('exportcapacity', { max });
+    }
+    if (changedKeys.includes('ems_control')) {
+      // Restart required to re-register capability listeners
+      return this.homey.__('settings.restart_required') ?? 'Restart the app to apply this change.';
     }
   }
 
